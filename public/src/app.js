@@ -24,6 +24,10 @@ resourceDemo.controller('MainCtrl', function ($scope, User) {
   $scope.users = User.query();
 });
 
-resourceDemo.controller('UserCtrl', function ($scope, user) {
+resourceDemo.controller('UserCtrl', function ($scope, user, User, $location) {
   $scope.user = user;
+  $scope.remove = function () {
+    User.remove({ userid: user.id });
+    $location.path('/');
+  };
 });

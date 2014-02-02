@@ -8,10 +8,10 @@ var users = [
   { id: 4, name: 'foobar', job: 'bar' }
 ];
 
-function getUserById(id) {
+function getUserIdx(id) {
   for (var i = users.length - 1; i >= 0; i--) {
     if (users[i].id === id) {
-      return users[i];
+      return i;
     }
   }
   return null;
@@ -24,10 +24,17 @@ app.get('/users', function (req, res) {
 });
 
 app.get('/users/:userid', function (req, res) {
-  var user = getUserById(parseInt(req.params.userid));
+  var userIdx = getUserIdx(parseInt(req.params.userid)),
+      user = users[userIdx];
   setTimeout(function () {
     res.send(JSON.stringify(user));
   }, 1000);
 });
+
+app.del('/users/:userid', function (req, res) {
+  var userIdx = getUserIdx(parseInt(req.params.userid));
+  users.splice(userIdx, 1);
+  res.send('OK');
+})
 
 app.listen(3000);
