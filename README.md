@@ -1,4 +1,4 @@
-angularjs-resource
+AngularJS resource
 ==================
 
-Source code for my blog post about the $resource service
+Source code from my blog post abour the `$resource` service.
