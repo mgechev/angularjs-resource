@@ -18,11 +18,13 @@ resourceDemo.config(function ($routeProvider) {
         return User.get({ userid: $route.current.params.userid }).$promise;
       }
     }
-  })
+  });
 });
 
 resourceDemo.factory('User', function ($cacheFactory, $resource) {
-  var User = $resource('/users/:userid');
+  var User = $resource('/users/:userid', {}, {
+    get: { cache: true, method: 'get' }
+  });
   return User;
 })
 
