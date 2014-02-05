@@ -15,7 +15,6 @@ resourceDemo.config(function ($routeProvider) {
     controller: 'UserCtrl',
     resolve: {
       user: function ($route, User) {
-        //Returns promise in $promise
         return User.get({ userid: $route.current.params.userid }).$promise;
       }
     }
@@ -23,29 +22,17 @@ resourceDemo.config(function ($routeProvider) {
 });
 
 resourceDemo.factory('User', function ($cacheFactory, $resource) {
-  var cache = $cacheFactory('user-cache'),
-      User = $resource('/users/:userid', { userid: '@userid' }, {
-         'query':  { method: 'get', isArray: true, cache: true },
-         'get'  :  { method: 'get', cache  : cache },
-         'save' :  { method: 'post', cache : cache, interceptor: {
-            response: function () {
-              console.log(arguments);
-            }
-         }}
-      });
-  User.cache = cache;
+  var User = $resource('/users/:userid');
   return User;
 })
 
 resourceDemo.controller('MainCtrl', function ($scope, User) {
-  //Populates the array
   $scope.users = User.query();
 });
 
 resourceDemo.controller('UserCtrl', function ($scope, user, User, $location) {
   $scope.user = user;
   $scope.remove = function () {
-    //Returns promise in $promise
     User.remove({ userid: user.id });
     $location.path('/');
   };
@@ -57,9 +44,7 @@ resourceDemo.controller('AddUserCtrl', function ($scope, User, $location) {
       name: $scope.name,
       job: $scope.job
     })
-    user.$save(function () {
-      console.log(user);
-    });
+    user.$save();
     $location.path('/');
   };
 });
